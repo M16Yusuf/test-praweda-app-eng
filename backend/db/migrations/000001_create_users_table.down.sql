@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS users_task2;
+DROP TABLE IF EXISTS users;
