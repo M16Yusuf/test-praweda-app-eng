@@ -2,7 +2,7 @@ include ./.env
 DBURL=postgres://$(DBUSER):$(DBPASS)@$(DBHOST):$(DBPORT)/$(DBNAME)?sslmode=disable
 MIGRATIONPATH=db/migrations
 
-# make database migrations NAME=create_user_table
+# make database migrations NAME=create_user_table (use : make migrate-create NAME=table_name)
 migrate-create:
 	migrate create -ext sql -dir $(MIGRATIONPATH) -seq create_$(NAME)_table
 
