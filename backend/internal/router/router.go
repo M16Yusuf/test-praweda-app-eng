@@ -17,6 +17,7 @@ func InitRouter(db *pgxpool.Pool) *gin.Engine {
 	router.Static("/img", "public")
 
 	InitAuthRouter(router, db)
+	InitEcommerceRouter(router)
 
 	// handle not found route
 	router.NoRoute(func(ctx *gin.Context) {
