@@ -1,1 +1,81 @@
-# test-praweda-app-eng
+# Technical Test - Application Engineer [Muhammad Yusuf]
+
+Proyek ini adalah implementasi dari soal Technical Test untuk posisi Application Engineer di Pt Praweda
+
+```javascript
+Kandidat = {
+  Nama: "Muhammad Yusuf",
+  Email: "yusufsmd58@gmail.com",
+};
+```
+
+## 🚀 Instalasi dan Setup
+
+1. Clone repository ini
+
+```
+git clone https://github.com/M16Yusuf/test-praweda-app-eng.git
+```
+
+2. buat/tambahkan env di backend `backend/.env`
+
+```
+DBUSER=<your_user>
+DBPASS=<your_pass>
+DBNAME=<your_db>
+DBHOST=<your_host>
+DBPORT=<your_port>
+
+
+JWT_SECRET=<your_jwt>
+```
+
+3. pindah ke backend, jalankan go mod tidy, dan mgirate database
+
+```sh
+cd backend
+go mod tidy
+```
+
+4. Migrate database
+
+```sh
+migrate -database YOUR_DATABASE_URL -path ./db/migrations up
+
+# jika menggunakan makefile
+make migrate-createUp
+```
+
+5. Jalankan program backend
+
+```sh
+go run ./cmd/main.go
+```
+
+## 📋 Implementasi Tugas
+
+1. Membuat API ecommerce menghitung diskon
+
+| Method | Endpoint                        | Body (Input)                                   | Response (Output Data)                                                                                                                                                                         |
+| ------ | ------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | 127.0.0.1:8080/ecommerce/diskon | {"harga_awal": 5000000, "pake_voucher": true}" | {"is_success": true, "code": 200, "message": "Anda menggunakan voucher..", "data": {"harga_awal": 5000000, "pake_voucher": true, "harga_setelah_diskon": 2500000, "points_didapatkan": 50000}} |
+
+2. Membuat API Oauth JWT dan Cookies
+
+| Method | Path                       | body                    | Deskripsi                                                                        | Authentication |
+| ------ | -------------------------- | ----------------------- | -------------------------------------------------------------------------------- | -------------- |
+| POST   | 127.0.0.1:8080/auth/login  | { "username": "yusuf" } | Membuat sesi baru dan mengautentikasi pengguna (membuat cookies dengan isi jwt). | None           |
+| GET    | 127.0.0.1:8080/auth/me     | { "username": "yusuf" } | Memverifikasi sesi mencocokan username dengan key cookies.                       | Session Cookie |
+| DELETE | 127.0.0.1:8080/auth/logout | { "username": "yusuf" } | Mengakhiri sesi pengguna yang aktif (menghapus key cookies).                     | Session Cookie |
+
+3. Membuat query join 2 table berdasarkan soal
+   ![image_no3](/assets/soal_no3.png)
+
+jawaban:
+
+```sql
+SELECT c.User_id, c.Id AS Company_id, u.Nama, u.Email, u.Telp, c.Company_code, c.Company_name
+FROM 'User' u
+RIGHT JOIN 'Company' c ON c.User_id = u.Id;
+
+```
