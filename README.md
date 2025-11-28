@@ -52,6 +52,15 @@ make migrate-createUp
 go run ./cmd/main.go
 ```
 
+6. Jalankan program frontend
+
+```sh
+cd .. # make sure berada di root repository
+cd frontend # masuk ke dalam frontend
+npm install # install dependencies
+npm run dev # jalankan frontend
+```
+
 ## 📋 Implementasi Tugas
 
 ### 1️⃣ . Membuat API ecommerce menghitung diskon
@@ -106,3 +115,9 @@ Query Parameters:
 | --------- | -------- | ------- | ------- | --------------------------------------------------- |
 | page      | Optional | Integer | 1       | Nomor halaman yang ingin diambil.                   |
 | results   | Optional | Integer | 10      | Jumlah item maksimum yang dikembalikan per halaman. |
+
+Lalu implementasikan API diatas dengan frontend yang diminta menggunakan react, typescript, & ant Design
+
+Hasil yang didapatkan :
+
+![image_demo](/assets/demo-frontend.png)
