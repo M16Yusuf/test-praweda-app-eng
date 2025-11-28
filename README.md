@@ -121,3 +121,28 @@ Lalu implementasikan API diatas dengan frontend yang diminta menggunakan react, 
 Hasil yang didapatkan :
 
 ![image_demo](/assets/demo-frontend.png)
+
+### 5️⃣ . Manipulasi Array
+
+Manipulasi array, menjadi dinamis ketika array `warna` bertambah datanya
+
+```typescript
+const warna: string[] = ["merah", "kuning", "hijau", "pink", "ungu"];
+const pakaian: string[] = ["baju", "celana", "topi", "jaket", "sepatu"];
+const statusDiskon: string[] = ["Diskon", "Sale", "Diskon", "Sale", "Sale"];
+
+const manipulasiArray: string[] = [];
+
+warna.push("maroon");
+
+for (let i = 0; i < warna.length; i++) {
+  const pakaianItem = pakaian[i] || pakaian[pakaian.length - i];
+  const diskonItem = statusDiskon[i] || statusDiskon[statusDiskon.length - i];
+
+  manipulasiArray.push(`${warna[i]} ${pakaianItem} ${diskonItem}`);
+}
+
+console.log(manipulasiArray);
+
+export default manipulasiArray;
+```
