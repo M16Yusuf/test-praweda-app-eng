@@ -16,8 +16,10 @@ func InitRouter(db *pgxpool.Pool) *gin.Engine {
 	// make directori public accesible
 	router.Static("/img", "public")
 
+	// all route initialization here
 	InitAuthRouter(router, db)
 	InitEcommerceRouter(router)
+	InitManipulasiRouter(router)
 
 	// handle not found route
 	router.NoRoute(func(ctx *gin.Context) {
