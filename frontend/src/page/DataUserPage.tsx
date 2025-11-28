@@ -1,7 +1,8 @@
 import { Input, Button, Table } from "antd";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router";
 
-interface DummyUser {
+interface UserInterface {
   name: string;
   location: string;
   email: string;
@@ -11,146 +12,71 @@ interface DummyUser {
   picture: string[];
 }
 
-const dummyData: DummyUser[] = [
-  {
-    name: "Miss Polyana Kotenko",
-    location:
-      "3967 Holmogorskiy provulok, Bogoduhiv, Kirovogradska, Ukraine, 20241",
-    email: "polyana.kotenko@example.com",
-    age: 26,
-    phone: "(097) M41-1541",
-    cell: "(097) F05-1370",
-    picture: [
-      "https://randomuser.me/api/portraits/women/76.jpg",
-      "https://randomuser.me/api/portraits/med/women/76.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/76.jpg",
-    ],
-  },
-  {
-    name: "Mrs Neea Peura",
-    location: "4206 Hämeenkatu, Pori, Kymenlaakso, Finland, 76462",
-    email: "neea.peura@example.com",
-    age: 77,
-    phone: "08-404-835",
-    cell: "049-672-39-12",
-    picture: [
-      "https://randomuser.me/api/portraits/women/66.jpg",
-      "https://randomuser.me/api/portraits/med/women/66.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/66.jpg",
-    ],
-  },
-  {
-    name: "Ms Amalie Olsen",
-    location: "5497 Stormgade, Juelsminde, Nordjylland, Denmark, 59955",
-    email: "amalie.olsen@example.com",
-    age: 65,
-    phone: "07380543",
-    cell: "28365825",
-    picture: [
-      "https://randomuser.me/api/portraits/women/89.jpg",
-      "https://randomuser.me/api/portraits/med/women/89.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/89.jpg",
-    ],
-  },
-  {
-    name: "Miss Mina Glavaš",
-    location: "8056 Ante Lambaše, Pirot, Bor, Serbia, 65703",
-    email: "mina.glavas@example.com",
-    age: 54,
-    phone: "011-6612-178",
-    cell: "067-0613-203",
-    picture: [
-      "https://randomuser.me/api/portraits/women/59.jpg",
-      "https://randomuser.me/api/portraits/med/women/59.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/59.jpg",
-    ],
-  },
-  {
-    name: "Mr Sherif Van Lee",
-    location:
-      "3595 Achter Het Zwarte Beerke, Zevenhuizen Zh, Groningen, Netherlands, 9982 PX",
-    email: "sherif.vanlee@example.com",
-    age: 69,
-    phone: "(0281) 294686",
-    cell: "(06) 22761217",
-    picture: [
-      "https://randomuser.me/api/portraits/men/86.jpg",
-      "https://randomuser.me/api/portraits/med/men/86.jpg",
-      "https://randomuser.me/api/portraits/thumb/men/86.jpg",
-    ],
-  },
-  {
-    name: "Mrs Florence Taylor",
-    location: "5576 Concession Road 23, Lumsden, Yukon, Canada, R5Q 6Z1",
-    email: "florence.taylor@example.com",
-    age: 25,
-    phone: "C38 U64-4159",
-    cell: "P12 W97-7625",
-    picture: [
-      "https://randomuser.me/api/portraits/women/13.jpg",
-      "https://randomuser.me/api/portraits/med/women/13.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/13.jpg",
-    ],
-  },
-  {
-    name: "Ms Draginja Šarić",
-    location: "1049 Lukićeva, Zaječar, Raška, Serbia, 63466",
-    email: "draginja.saric@example.com",
-    age: 52,
-    phone: "030-3117-234",
-    cell: "064-6519-459",
-    picture: [
-      "https://randomuser.me/api/portraits/women/39.jpg",
-      "https://randomuser.me/api/portraits/med/women/39.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/39.jpg",
-    ],
-  },
-  {
-    name: "Mr سهیل محمدخان",
-    location: "4392 پیروزی, اهواز, گیلان, Iran, 29363",
-    email: "shyl.mhmdkhn@example.com",
-    age: 60,
-    phone: "084-33632013",
-    cell: "0987-307-7644",
-    picture: [
-      "https://randomuser.me/api/portraits/men/36.jpg",
-      "https://randomuser.me/api/portraits/med/men/36.jpg",
-      "https://randomuser.me/api/portraits/thumb/men/36.jpg",
-    ],
-  },
-  {
-    name: "Mr Daniel Christiansen",
-    location: "7719 Stormgade, Ugerløse, Midtjylland, Denmark, 31085",
-    email: "daniel.christiansen@example.com",
-    age: 66,
-    phone: "85212556",
-    cell: "81283202",
-    picture: [
-      "https://randomuser.me/api/portraits/men/6.jpg",
-      "https://randomuser.me/api/portraits/med/men/6.jpg",
-      "https://randomuser.me/api/portraits/thumb/men/6.jpg",
-    ],
-  },
-  {
-    name: "Miss Vladislava da Cunha",
-    location: "6731 Rua Boa Vista , Pindamonhangaba, Tocantins, Brazil, 72611",
-    email: "vladislava.dacunha@example.com",
-    age: 38,
-    phone: "(89) 9376-0454",
-    cell: "(16) 1886-4055",
-    picture: [
-      "https://randomuser.me/api/portraits/women/92.jpg",
-      "https://randomuser.me/api/portraits/med/women/92.jpg",
-      "https://randomuser.me/api/portraits/thumb/women/92.jpg",
-    ],
-  },
-];
-
 function DataUserPage() {
-  const [data] = useState(dummyData);
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: "1",
+    results: "10",
+  });
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState<UserInterface[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // compute pagination values from URL params and data
+  const pageSize = parseInt(searchParams.get("results") || "10", 10);
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  // Filter data client-side by name only (case-insensitive). This does not
+  // trigger any backend fetch — it operates on the `data` already loaded.
+  const filteredData = useMemo(() => {
+    if (!search) return data;
+    const q = search.trim().toLowerCase();
+    return data.filter((d) => (d.name || "").toLowerCase().includes(q));
+  }, [data, search]);
+
+  // If backend returns exactly pageSize items, assume there may be a next page
+  // and set total to allow AntD to enable the Next button. We base this on
+  // the raw `data` (the current server page) so Next reflects server's page
+  // availability. For display/current page we clamp against filteredData.
+  let paginationTotal = (currentPage - 1) * pageSize + data.length;
+  if (data.length === pageSize) paginationTotal = currentPage * pageSize + 1;
+
+  // Do not clamp the current page to the filtered results. Keep `currentPage`
+  // from the URL so pagination controls (Next/Prev) reflect server-driven
+  // paging. The search filters only the currently loaded page (`data`).
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8080/manipulasi?results=${searchParams.get(
+            "results"
+          )}&page=${searchParams.get("page")}`
+        );
+        if (!res.ok) throw new Error(`fetch error: ${res.status}`);
+        const json = await res.json();
+
+        // backend wraps payload in data, with nested data field
+        const items = json?.data?.data ?? json?.data ?? json?.results ?? json;
+        if (Array.isArray(items)) {
+          setData(items as UserInterface[]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch manipulated data:", err);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [searchParams]);
+
   return (
-    <div style={{ maxWidth: "1200px", justifySelf: "center" }}>
-      <h1>List</h1>
+    <div
+      style={{
+        maxWidth: "1200px",
+        justifySelf: "center",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <h2 style={{ fontWeight: "800" }}>List</h2>
       <div
         style={{
           display: "flex",
@@ -161,28 +87,64 @@ function DataUserPage() {
       >
         <Input.Search
           placeholder="Search"
-          style={{ maxWidth: "600px" }}
-          variant="filled"
+          style={{ maxWidth: "400px" }}
+          variant="outlined"
+          value={search}
+          onChange={(e) => setSearch((e.target as HTMLInputElement).value)}
+          disabled={loading}
         />
-        <Button>+ New Data</Button>
+        <Button loading={loading}>+ New Data</Button>
       </div>
       <Table
-        dataSource={data}
+        dataSource={filteredData}
         columns={[
           { title: "Nama", dataIndex: "name", key: "name" },
           { title: "Umur", dataIndex: "age", key: "age" },
-          { title: "Alamat", dataIndex: "location", key: "location" },
+          {
+            title: "Alamat",
+            dataIndex: "location",
+            key: "location",
+          },
           { title: "Email", dataIndex: "email", key: "email" },
-          { title: "No telepon 1", dataIndex: "phone", key: "phone" },
-          { title: "No telepon 2", dataIndex: "cell", key: "cell" },
+          {
+            title: "No telepon 1",
+            dataIndex: "phone",
+            key: "phone",
+            minWidth: 120,
+          },
+          {
+            title: "No telepon 2",
+            dataIndex: "cell",
+            key: "cell",
+            minWidth: 120,
+          },
           {
             title: "Gambar",
             dataIndex: "picture",
             key: "picture",
-            render: (picture: string[]) => <img src={picture[2]} alt="User" />,
+            render: (picture: string[]) => <img src={picture[1]} alt="User" />,
           },
         ]}
         rowKey="email"
+        loading={loading}
+        pagination={{
+          pageSize,
+          current: currentPage,
+          total: paginationTotal,
+          showSizeChanger: true,
+          pageSizeOptions: ["5", "10", "20", "50"],
+          onChange: (page, pageSize) => {
+            setSearchParams({
+              page: page.toString(),
+              results: pageSize.toString(),
+            });
+          },
+          // when user changes page size explicitly, go back to page 1
+          onShowSizeChange: (_current, size) => {
+            setSearchParams({ page: "1", results: size.toString() });
+          },
+          showTotal: () => `Items: ${paginationTotal}`,
+        }}
       />
     </div>
   );

@@ -6,7 +6,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DataUserPage />} />
+        <Route path="/" index element={<DataUserPage />} />
       </Routes>
     </BrowserRouter>
   );
